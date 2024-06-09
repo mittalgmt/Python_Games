@@ -32,12 +32,15 @@ ball.shape("circle")
 ball.color("white")
 ball.penup()
 ball.goto(0, 0)
-ball.dx = 0.1  
-ball.dy = 0.1  
+ball.dx = 0.2  
+ball.dy = 0.2  
 
 # Score variables
 score_a = 0
 score_b = 0
+
+# Colors list for paddle and ball
+colors = ["white", "yellow", "green", "blue", "red", "purple", "orange", "pink", "cyan", "magenta"]
 
 # Scoreboard
 scoreboard = turtle.Turtle()
@@ -52,6 +55,13 @@ scoreboard.write("Player A: 0  Player B: 0", align="center", font=("Courier", 24
 def update_scoreboard():
     scoreboard.clear()
     scoreboard.write(f"Player A: {score_a}  Player B: {score_b}", align="center", font=("Courier", 24, "normal"))
+
+# Function to change color based on score
+def change_colors():
+    color_index = (score_a + score_b) % len(colors)
+    paddle_a.color(colors[color_index])
+    paddle_b.color(colors[color_index])
+    ball.color(colors[color_index])
 
 # Function to move paddle A up
 def paddle_a_up():
@@ -70,7 +80,7 @@ def paddle_a_down():
 # Function to move paddle B up
 def paddle_b_up():
     y = paddle_b.ycor()
-    if y < 250:
+    if y < 250: 
         y += 20
     paddle_b.sety(y)
 
@@ -111,12 +121,14 @@ while True:
             ball.dx *= -1
             score_a += 1
             update_scoreboard()
+            change_colors()
         
         if ball.xcor() < -390:
             ball.goto(0, 0)
             ball.dx *= -1
             score_b += 1
             update_scoreboard()
+            change_colors()
         
         # Paddle and ball collision
         if (ball.dx > 0 and 340 < ball.xcor() < 350) and (paddle_b.ycor() - 50 < ball.ycor() < paddle_b.ycor() + 50):
@@ -128,4 +140,4 @@ while True:
             ball.dx *= -1
 
     except turtle.Terminator:
-        break  
+        break 
